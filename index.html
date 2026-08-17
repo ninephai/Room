@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <base target="_top">
+  <title>จองห้องประชุมเทศบาลตำบลบึงโขงหลง</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #FFF0F5;
+      background-image: url('https://i.postimg.cc/7ZhkVNF6/bgweb-m57w7IJFri34138.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-attachment: scroll; 
+      background-repeat: no-repeat;
+      color: #6c2c10;
+      margin: 0;
+      padding: 10px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(255, 240, 245, 0.82);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      display: block; /* เปิดแสดงหน้าเว็บทันที */
+    }
+
+    /* ===== Header ===== */
+    .header {
+      text-align: center;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+    .header img {
+      max-height: 80px;
+      width: auto;
+      margin-bottom: 6px;
+    }
+    .header h1 {
+      font-size: clamp(1.15rem, 4vw, 1.5rem);
+      color: #D81B60;
+      margin: 0 0 12px 0;
+      line-height: 1.3;
+      padding: 0 4px;
+    }
+
+    /* ===== Layout ===== */
+    .page-content-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      width: 100%;
+      align-items: flex-start;
+    }
+    .content-column {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    .form-column { flex: 1 1 360px; min-width: 0; }
+    .calendar-column { flex: 2 1 480px; min-width: 0; }
+
+    .content-column h2 {
+      font-size: clamp(1.15rem, 3.5vw, 1.3rem);
+      color: #5D4037;
+      margin: 0 0 14px 0;
+      text-align: center;
+      border-bottom: 1px solid #F48FB1;
+      padding-bottom: 10px;
+    }
+
+    /* ===== Form ===== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .form-group label {
+      font-weight: 600;
+      color: #C2185B;
+      font-size: 0.92rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1.5px solid #F8BBD0;
+      border-radius: 8px;
+      font-size: 16px; 
+      background: #FFEBEE;
+      color: #5D4037;
+      min-height: 46px;
+    }
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #EC407A;
+      box-shadow: 0 0 0 3px rgba(236, 64, 122, 0.2);
+    }
+
+    .button-group {
+      text-align: center;
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    button {
+      background: #EC407A;
+      color: white;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      min-height: 46px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:hover { background: #D81B60; }
+    button:active { transform: scale(0.98); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    button.report-button { background: #7E57C2; }
+    button.report-button:hover { background: #5E35B1; }
+
+    /* ===== Calendar ===== */
+    #imageGallery {
+      width: 100%;
+      min-height: 420px;
+      background: #fafafa;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .fc { font-size: 0.88rem; }
+    .fc .fc-toolbar-title {
+      font-size: clamp(1rem, 3.5vw, 1.25rem) !important;
+      color: #C2185B;
+    }
+    .fc .fc-button-primary {
+      background: #F06292 !important;
+      border-color: #F06292 !important;
+      padding: 6px 10px !important;
+      font-size: 0.85rem !important;
+    }
+    .fc-event {
+      border-radius: 4px !important;
+      font-size: 0.78rem !important;
+      cursor: pointer;
+    }
+    .fc .fc-toolbar {
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px !important;
+    }
+    .fc .fc-toolbar-chunk {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    /* ===== Report section ===== */
+    .report-section {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px dashed #F48FB1;
+    }
+    .report-section h3 {
+      text-align: center;
+      margin: 0 0 12px 0;
+      color: #5D4037;
+      font-size: 1.05rem;
+    }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050;
+      padding: 12px;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px 16px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-content h3 {
+      margin: 0 0 14px 0;
+      color: #C2185B;
+      text-align: center;
+      font-size: 1.15rem;
+    }
+    .modal-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .modal-actions button {
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+    .modal-actions button#cancelModalButton { background: #BDBDBD; }
+
+    /* ===== Footer ===== */
+    .footer {
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #F48FB1;
+      color: #AD1457;
+      font-size: 0.82rem;
+      width: 100%;
+    }
+
+    /* ===== Feedback & Loading ===== */
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #EC407A;
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      animation: spin 0.8s linear infinite;
+      margin: 14px auto;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #feedbackMessage {
+      text-align: center;
+      padding: 12px 14px;
+      margin: 12px 0 0 0;
+      border-radius: 8px;
+      display: none;
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+    #feedbackMessage.success { background: #C8E6C9; color: #2E7D32; }
+    #feedbackMessage.error { background: #FFCDD2; color: #C62828; }
+    #feedbackMessage.info { background: #BBDEFB; color: #0D47A1; text-align: left; }
+
+    /* ===== Media Queries ===== */
+    @media (max-width: 992px) {
+      .page-content-wrapper { flex-direction: column; }
+      .form-column, .calendar-column { width: 100%; flex: none; }
+      .form-column { order: 1; }
+      .calendar-column { order: 2; }
+      #imageGallery { min-height: 480px; }
+    }
+    @media (max-width: 600px) {
+      body { padding: 8px; }
+      .header img { max-height: 65px; }
+      .content-column { padding: 14px 12px; }
+      .form-grid { grid-template-columns: 1fr; gap: 11px; }
+      .button-group button { width: 100%; max-width: 100%; }
+      #imageGallery { min-height: 380px; }
+      .fc .fc-toolbar-title { font-size: 1rem !important; }
+      .fc .fc-button { padding: 5px 8px !important; font-size: 0.8rem !important; }
+      .modal-content { padding: 18px 14px; }
+      .modal-actions { flex-direction: column; }
+      .modal-actions button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper" id="mainAppWrapper">
+    <div class="header">
+      <img src="https://i.postimg.cc/C5RsRHgV/S-5677128-1.png" alt="โลโก้" onerror="this.style.display='none'">
+      <h1>จองห้องประชุมเทศบาลตำบลบึงโขงหลง</h1>
+    </div>
+
+    <div class="page-content-wrapper">
+      <!-- ฟอร์ม -->
+      <div class="content-column form-column">
+        <h2>กรอกข้อมูลการจอง</h2>
+        <form id="bookingForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="nameInput">ชื่อ-นามสกุล ผู้จอง:</label>
+              <input type="text" id="nameInput" required>
+            </div>
+            <div class="form-group">
+              <label for="PhoneInput">เบอร์โทรศัพท์:</label>
+              <input type="tel" id="PhoneInput" required>
+            </div>
+            <div class="form-group">
+              <label for="departmentSelect">หน่วยงาน / กอง:</label>
+              <select id="departmentSelect" required>
+                <option value="">-- กรุณาเลือกหน่วยงาน --</option>
+                <option value="สำนักปลัด">สำนักปลัด</option>
+                <option value="กองคลัง">กองคลัง</option>
+                <option value="กองสวัสดิการสังคม">กองสวัสดิการสังคม</option>
+                <option value="กองช่าง">กองช่าง</option>
+                <option value="กองการศึกษา">กองการศึกษา</option>
+                <option value="กองยุทธศาสตร์">กองยุทธศาสตร์</option>
+                <option value="กองสาธารณสุขฯ">กองสาธารณสุขฯ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="roomSelect">เลือกห้องประชุม:</label>
+              <select id="roomSelect" required>
+                <option value="">-- กรุณาเลือกห้อง --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="attendeesInput">จำนวนผู้เข้าร่วม (สูงสุด <span id="maxCapacity">N/A</span> คน):</label>
+              <input type="number" id="attendeesInput" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="dateInput">วันที่จอง:</label>
+              <input type="date" id="dateInput" required>
+            </div>
+            <div class="form-group">
+              <label for="startTimeInput">เวลาเริ่มต้น:</label>
+              <input type="time" id="startTimeInput" required>
+            </div>
+            <div class="form-group">
+              <label for="endTimeInput">เวลาสิ้นสุด:</label>
+              <input type="time" id="endTimeInput" required>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="purposeInput">วัตถุประสงค์หรือโครงการ:</label>
+              <textarea id="purposeInput" required></textarea>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="targetInput">กลุ่มเป้าหมาย:</label>
+              <textarea id="targetInput"></textarea>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="notesInput">หมายเหตุเพิ่มเติม:</label>
+              <textarea id="notesInput"></textarea>
+            </div>
+          </div>
+          <div class="button-group">
+            <button type="submit" id="uploadButton">ส่งข้อมูลการจอง</button>
+          </div>
+        </form>
+        <div id="feedbackMessage"></div>
+        <div class="loading-spinner" id="loadingSpinner"></div>
+      </div>
+
+      <!-- ปฏิทิน -->
+      <div class="content-column calendar-column">
+        <h2>ปฏิทินการจอง</h2>
+        <div id="imageGallery"></div>
+
+        <div class="report-section">
+          <h3>รายงานข้อมูลการจอง (PDF)</h3>
+          <div class="button-group">
+            <button class="report-button" onclick="openReportModal('daily')">รายงานรายวัน</button>
+            <button class="report-button" onclick="openReportModal('monthly')">รายงานรายเดือน</button>
+            <button class="report-button" onclick="openReportModal('yearly')">รายงานรายปี</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal รายงาน -->
+    <div id="reportModal" class="modal-overlay">
+      <div class="modal-content">
+        <h3 id="modalTitle">ระบุข้อมูลสำหรับรายงาน</h3>
+        <div id="modalInputsContainer"></div>
+        <div class="modal-actions">
+          <button id="generateReportFromModalButton">สร้างรายงาน</button>
+          <button id="cancelModalButton" onclick="closeReportModal()">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>พัฒนาโดย นายเกียรติอนันต์ สุกทน | กองยุทธศาสตร์และงบประมาณ</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
+  <script>
+    // =================================================================
+    // API CONFIGURATION 
+    // =================================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbxJzSWkkIEfVWrtAjWCQc6-6IwxTB0xhxeP9BULxPeoZFzC6M61hh13XwW2EQEyjtNz/exec"; 
+    
+    let calendar = null;
+    let allRoomsData = [];
+    let currentReportType = '';
+
+    // =================================================================
+    // CORE FUNCTIONS & UTILS
+    // =================================================================
+    async function apiCall(payload) {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        return await response.json();
+      } catch (error) {
+        return { success: false, error: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้: ' + error.message };
+      }
+    }
+
+    function showLoading(isLoading) {
+      const el = document.getElementById('loadingSpinner');
+      if (el) el.style.display = isLoading ? 'block' : 'none';
+    }
+
+    function showFeedback(message, type = 'info') {
+      const el = document.getElementById('feedbackMessage');
+      if (!el) return;
+      el.innerHTML = message;
+      el.className = type;
+      el.style.display = 'block';
+      if (type !== 'info') {
+        setTimeout(() => {
+          if (el.style.display === 'block') {
+            el.style.display = 'none';
+            el.innerHTML = '';
+          }
+        }, type === 'success' ? 4000 : 7000);
+      }
+    }
+
+    // =================================================================
+    // INITIALIZATION (โหลดข้อมูลทันที)
+    // =================================================================
+    document.addEventListener('DOMContentLoaded', async function() {
+      initCalendar();
+      populateRoomDropdown();
+
+      const today = new Date();
+      document.getElementById('dateInput').value = today.toISOString().split('T')[0];
+
+      // จัดการการเปลี่ยนห้อง เพื่ออัปเดต Max Capacity
+      document.getElementById('roomSelect').addEventListener('change', function() {
+        const room = allRoomsData.find(r => r.RoomName === this.value);
+        if (room) {
+          document.getElementById('maxCapacity').textContent = room.Capacity;
+          document.getElementById('attendeesInput').max = room.Capacity;
+        } else {
+          document.getElementById('maxCapacity').textContent = 'N/A';
+          document.getElementById('attendeesInput').removeAttribute('max');
+        }
+      });
+      
+      setupFormSubmit();
+      setupReportModal();
+    });
+
+    // =================================================================
+    // CALENDAR SYSTEM
+    // =================================================================
+    function initCalendar() {
+      const calendarEl = document.getElementById('imageGallery');
+      const isMobile = window.innerWidth <= 600;
+      const initialView = isMobile ? 'listWeek' : 'timeGridWeek';
+      const calHeight = isMobile ? 420 : 550;
+
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: initialView,
+        locale: 'th',
+        height: calHeight,
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: isMobile ? 'dayGridMonth,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        buttonText: { today: 'วันนี้', month: 'เดือน', week: 'สัปดาห์', day: 'วัน', list: 'รายการ' },
+        navLinks: true, editable: false, selectable: true, dayMaxEvents: true,
+        select: function(info) {
+          document.getElementById('dateInput').value = info.startStr.split('T')[0];
+          if (!info.allDay && info.startStr.includes('T')) {
+            document.getElementById('startTimeInput').value = info.startStr.split('T')[1].substring(0, 5);
+          }
+          document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
+        },
+        eventClick: function(info) {
+          const feedbackEl = document.getElementById('feedbackMessage');
+          const props = info.event.extendedProps || {};
+
+          feedbackEl.innerHTML = `
+            <div style="padding:12px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px;">
+              <h4 style="margin:0 0 10px; color:#D81B60;">รายละเอียดการจอง</h4>
+              <p><strong>ห้อง:</strong> ${props.roomName || 'N/A'}</p>
+              <p><strong>ผู้จอง:</strong> ${props.name || 'N/A'}</p>
+              <p><strong>เบอร์โทร:</strong> ${props.phoneNumber || 'N/A'}</p>
+              <p><strong>หน่วยงาน:</strong> ${props.department || 'N/A'}</p>
+              <p><strong>วัตถุประสงค์:</strong> ${info.event.title || 'N/A'}</p>
+              <p><strong>วันที่:</strong> ${info.event.start.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' })}</p>
+              <p><strong>เวลา:</strong> ${info.event.start.toLocaleTimeString('th-TH', { hour:'2-digit', minute:'2-digit' })} - ${info.event.end ? info.event.end.toLocaleTimeString('th-TH', { hour:'2-digit', minute:'2-digit' }) : 'N/A'}</p>
+              <p><strong>จำนวนผู้เข้าร่วม:</strong> ${props.attendees || 'N/A'}</p>
+              <p><strong>กลุ่มเป้าหมาย:</strong> ${props.targetAudience || 'N/A'}</p>
+              <p><strong>หมายเหตุ:</strong> ${props.notes || 'N/A'}</p>
+              <hr style="margin:12px 0; border:0; border-top:1px solid #F48FB1;">
+              <div style="text-align:right; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
+                <button id="deleteBookingBtnClient" style="background:#D32F2F; color:white; border:none; padding:10px 14px; border-radius:6px; cursor:pointer;">ลบการจองนี้</button>
+                <button id="closeEventDetailsBtnClient" style="background:#757575; color:white; border:none; padding:10px 14px; border-radius:6px; cursor:pointer;">ปิด</button>
+              </div>
+            </div>
+          `;
+          feedbackEl.className = 'info';
+          feedbackEl.style.display = 'block';
+          feedbackEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          document.getElementById('deleteBookingBtnClient').onclick = async function() {
+            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบการจองนี้?')) {
+              showLoading(true);
+              const res = await apiCall({ action: 'deleteBooking', bookingId: info.event.id });
+              showLoading(false);
+              if (res.success) {
+                showFeedback(res.message, 'success');
+                calendar.refetchEvents();
+              } else {
+                showFeedback('ลบไม่สำเร็จ: ' + res.error, 'error');
+              }
+            }
+          };
+
+          document.getElementById('closeEventDetailsBtnClient').onclick = function() {
+            feedbackEl.style.display = 'none';
+            feedbackEl.innerHTML = '';
+          };
+        },
+        events: async function(fetchInfo, successCallback, failureCallback) {
+          showLoading(true);
+          const res = await apiCall({ action: 'getEvents' });
+          showLoading(false);
+          if (res.success && Array.isArray(res.data)) {
+            successCallback(res.data);
+          } else {
+            showFeedback('ไม่สามารถโหลดข้อมูลปฏิทินได้', 'error');
+            successCallback([]);
+          }
+        }
+      });
+      calendar.render();
+
+      window.addEventListener('resize', function() {
+        if (!calendar) return;
+        const mobile = window.innerWidth <= 600;
+        calendar.setOption('height', mobile ? 420 : 550);
+      });
+    }
+
+    // =================================================================
+    // FORM & DATA HANDLING
+    // =================================================================
+    async function populateRoomDropdown() {
+      const res = await apiCall({ action: 'getRooms' });
+      if (res.success && Array.isArray(res.data)) {
+        allRoomsData = res.data;
+        const select = document.getElementById('roomSelect');
+        select.innerHTML = '<option value="">-- กรุณาเลือกห้อง --</option>';
+        res.data.forEach(room => {
+          const opt = document.createElement('option');
+          opt.value = room.RoomName;
+          opt.textContent = `${room.RoomName} (จุ ${room.Capacity || 'N/A'} คน)`;
+          select.appendChild(opt);
+        });
+      } else {
+        showFeedback('โหลดข้อมูลห้องไม่สำเร็จ', 'error');
+      }
+    }
+
+    function setupFormSubmit() {
+      document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('uploadButton');
+        btn.disabled = true;
+        showLoading(true);
+
+        const formData = {
+          nameInput: document.getElementById('nameInput').value.trim(),
+          PhoneInput: document.getElementById('PhoneInput').value.trim(),
+          departmentSelect: document.getElementById('departmentSelect').value,
+          roomSelect: document.getElementById('roomSelect').value,
+          purposeInput: document.getElementById('purposeInput').value.trim(),
+          targetInput: document.getElementById('targetInput').value.trim(),
+          attendeesInput: document.getElementById('attendeesInput').value,
+          dateInput: document.getElementById('dateInput').value,
+          startTimeInput: document.getElementById('startTimeInput').value,
+          endTimeInput: document.getElementById('endTimeInput').value,
+          notesInput: document.getElementById('notesInput').value.trim()
+        };
+
+        const res = await apiCall({ action: 'submitBooking', formData: formData });
+        
+        showLoading(false);
+        btn.disabled = false;
+        
+        if (res.success) {
+          showFeedback(res.message || 'จองสำเร็จ', 'success');
+          document.getElementById('bookingForm').reset();
+          document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+          document.getElementById('maxCapacity').textContent = 'N/A';
+          if (calendar) calendar.refetchEvents();
+        } else {
+          showFeedback(res.error || 'จองไม่สำเร็จ', 'error');
+        }
+      });
+    }
+
+    // =================================================================
+    // REPORT MODAL
+    // =================================================================
+    function openReportModal(type) {
+      currentReportType = type;
+      const title = document.getElementById('modalTitle');
+      const container = document.getElementById('modalInputsContainer');
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+
+      if (type === 'daily') {
+        title.textContent = 'รายงานรายวัน';
+        container.innerHTML = `<div class="form-group"><label>วันที่</label><input type="date" id="reportDateInput" value="${y}-${m}-${d}"></div>`;
+      } else if (type === 'monthly') {
+        title.textContent = 'รายงานรายเดือน';
+        let opts = '';
+        for (let i = 1; i <= 12; i++) {
+          const mm = String(i).padStart(2, '0');
+          opts += `<option value="${mm}" ${mm === m ? 'selected' : ''}>${mm}</option>`;
+        }
+        container.innerHTML = `
+          <div class="form-group"><label>เดือน</label><select id="reportMonthInput">${opts}</select></div>
+          <div class="form-group"><label>ปี</label><input type="number" id="reportYearInputMonth" value="${y}" min="2020" max="2100"></div>
+        `;
+      } else {
+        title.textContent = 'รายงานรายปี';
+        container.innerHTML = `<div class="form-group"><label>ปี</label><input type="number" id="reportYearInputYear" value="${y}" min="2020" max="2100"></div>`;
+      }
+      document.getElementById('reportModal').style.display = 'flex';
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportModal').style.display = 'none';
+    }
+
+    function setupReportModal() {
+      document.getElementById('generateReportFromModalButton').addEventListener('click', async function() {
+        let filterDate = null;
+        const container = document.getElementById('modalInputsContainer');
+
+        if (currentReportType === 'daily') {
+          const val = container.querySelector('#reportDateInput')?.value;
+          if (val) filterDate = val;
+        } else if (currentReportType === 'monthly') {
+          const m = container.querySelector('#reportMonthInput')?.value;
+          const y = container.querySelector('#reportYearInputMonth')?.value;
+          if (m && y) filterDate = y + '-' + m;
+        } else if (currentReportType === 'yearly') {
+          const y = container.querySelector('#reportYearInputYear')?.value;
+          if (y) filterDate = y;
+        }
+
+        if (!filterDate) {
+          alert('กรุณาระบุข้อมูลให้ครบ');
+          return;
+        }
+
+        closeReportModal();
+        showLoading(true);
+
+        const res = await apiCall({ action: 'generateReport', reportType: currentReportType, filterParam: filterDate });
+        
+        showLoading(false);
+        if (res.success && res.pdfBase64) {
+          const a = document.createElement('a');
+          a.href = 'data:application/pdf;base64,' + res.pdfBase64;
+          a.download = res.fileName || 'report.pdf';
+          a.click();
+          showFeedback('สร้างรายงานสำเร็จ', 'success');
+        } else {
+          showFeedback(res.error || 'สร้างรายงานไม่สำเร็จ', 'error');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
